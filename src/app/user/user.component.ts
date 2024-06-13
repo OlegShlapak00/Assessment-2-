@@ -18,6 +18,8 @@ import { AuthService } from '../providers/auth.service';
 })
 export class UserComponent implements OnInit {
   exams: IExam[];
+  filteredExams: IExam[];
+  examDates: Date[];
   passwordChangeForm: FormGroup;
   user: IExam;
 
@@ -31,6 +33,7 @@ export class UserComponent implements OnInit {
 
   ngOnInit(): void {
     this.exams = this.route.snapshot.data.exams;
+    this.examDates = this.exams.map(exam => new Date(exam.details.exam_date));
 
     if (this.exams && this.exams.length) {
       this.user = this.exams[0];
@@ -57,14 +60,17 @@ export class UserComponent implements OnInit {
       return alert('form is not valid');
     }
 
-    let { password } = this.passwordChangeForm.value;
+    let {password, id, role, username} = this.passwordChangeForm.value;
 
     this.auth
       .updateUser({
-        ...this.passwordChangeForm.value,
+        id,
+        role,
+        username,
         passwordHash: Md5.hashStr(password),
+        status: 1,
       })
-      .subscribe((data) => {
+      .subscribe(() => {
         this.toastr.success('your password is changed. please login again');
         this.auth.logOut();
       });
@@ -78,5 +84,13 @@ export class UserComponent implements OnInit {
     } else {
       return { invalid: true, mismatch: true };
     }
+  }
+
+  isStudent(): boolean {
+    return this.auth.getLoggedInUser()?.role === 'student';
+  }
+
+  filterExams(date: string): void {
+    this.filteredExams = this.exams.filter(exam => exam.details.exam_date === date);
   }
 }

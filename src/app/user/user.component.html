@@ -1,7 +1,5 @@
 <div class="my-5 container">
 
-
-
   <div class="main-body mb-5">
 
     <!-- Breadcrumb -->
@@ -30,7 +28,6 @@
           </div>
         </div>
 
-
         <div class="card p-3">
           <h4 class="mb-3">Password change</h4>
           <form [formGroup]="passwordChangeForm" (ngSubmit)="onSubmitForm()">
@@ -52,10 +49,12 @@
         </div>
 
       </div>
+
       <div class="col-md-8">
 
+        <app-calendar *ngIf="isStudent()" [examDates]="examDates" (onDateChanged)="filterExams($event)"></app-calendar>
 
-        <ng-container *ngFor="let exam of exams">
+        <ng-container *ngFor="let exam of filteredExams">
 
           <div class="card mb-3">
             <div class="card-body">
@@ -70,17 +69,19 @@
               <a [href]="exam.details.graded_url">{{ exam.details.graded_url }}</a>
               </list-item>
 
+              <list-item title="Ungraded Link">
+                <a [href]="exam.details.ungraded_url">{{ exam.details.graded_url }}</a>
+              </list-item>
+
             </div>
           </div>
-
 
         </ng-container>
 
       </div>
+
     </div>
 
   </div>
-
-
 
 </div>

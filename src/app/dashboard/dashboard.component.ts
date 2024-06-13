@@ -6,6 +6,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { IExam } from '../models/exam';
 import { AuthService } from '../providers/auth.service';
+import { MatDialog } from '@angular/material/dialog';
+import { SummaryDialogComponent } from '../summary-dialog/summary-dialog.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -43,18 +45,15 @@ export class DashboardComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private toastr: ToastrService,
-    private auth: AuthService
+    private auth: AuthService,
+    public dialog: MatDialog
   ) {}
-
-  ngAfterViewInit() {}
 
   ngOnInit(): void {
     this.exams = this.route.snapshot.data.exams;
     this.users = this.route.snapshot.data.users;
     this.dataSource = new MatTableDataSource<IExam>(this.exams);
     this.dataSource.paginator = this.paginator;
-
-    console.log(this.exams);
   }
 
   changeStatus(e, exam: IExam) {
@@ -69,7 +68,7 @@ export class DashboardComponent implements OnInit {
         console.log(data);
         this.toastr.success('Successfully Updated User');
       },
-      (err) => {
+      () => {
         this.toastr.error('Update failed');
       }
     );
@@ -79,9 +78,15 @@ export class DashboardComponent implements OnInit {
         console.log(data);
         this.toastr.success('Successfully Updated Exam');
       },
-      (err) => {
+      () => {
         this.toastr.error('Update failed');
       }
     );
+  }
+
+  openDialog(summaryText: string): void {
+    this.dialog.open(SummaryDialogComponent, {
+      data: { summaryText },
+    });
   }
 }

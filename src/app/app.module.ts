@@ -20,6 +20,11 @@ import { ListItemComponent } from './list-item/list-item.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatCardModule } from '@angular/material/card';
+import { provideNativeDateAdapter } from '@angular/material/core';
+import { CalendarComponent } from './calendar/calendar.component';
+import { SummaryDialogComponent } from './summary-dialog/summary-dialog.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +40,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     IsLoggedDirective,
     ListItemComponent,
     DashboardComponent,
+    CalendarComponent,
+    SummaryDialogComponent
   ],
   imports: [
     CommonModule,
@@ -45,10 +52,12 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     ReactiveFormsModule,
     MatTableModule,
     MatPaginatorModule,
+    MatDatepickerModule,
     ToastrModule.forRoot(),
     AppRoutingModule,
+    MatCardModule,
   ],
-  providers: [],
+  providers: [provideNativeDateAdapter()],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
